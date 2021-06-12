@@ -1,0 +1,1132 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Serverless Rules for checking infrastructure-as-code templates against serverless recommended practices.">
+      
+      
+      
+        <meta name="author" content="Amazon Web Services">
+      
+      
+      <link rel="icon" href="../images/aws-logo-light.svg">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.7">
+    
+    
+      
+        <title>With cfn-lint - Serverless Rules</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ca7ac06f.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.f1a3b89f.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#009485">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="deep-orange">
+  
+    
+    <script>function __prefix(e){return new URL("..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#cfn-lint-module" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Serverless Rules" class="md-header__button md-logo" aria-label="Serverless Rules" data-md-component="logo">
+      
+  <img src="../images/aws-logo-light.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Serverless Rules
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              With cfn-lint
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/awslabs/serverless-rules/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    awslabs/serverless-rules
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Serverless Rules" class="md-nav__button md-logo" aria-label="Serverless Rules" data-md-component="logo">
+      
+  <img src="../images/aws-logo-light.svg" alt="logo">
+
+    </a>
+    Serverless Rules
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/awslabs/serverless-rules/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    awslabs/serverless-rules
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Homepage
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rules/" class="md-nav__link">
+        Rules
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
+      
+      <label class="md-nav__link" for="__nav_3">
+        Usage guides
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Usage guides" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Usage guides
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          With cfn-lint
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        With cfn-lint
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    Installation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    Usage
+  </a>
+  
+    <nav class="md-nav" aria-label="Usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sample-outputs" class="md-nav__link">
+    Sample outputs
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ignoring-rules" class="md-nav__link">
+    Ignoring rules
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#other-frameworks" class="md-nav__link">
+    Other frameworks
+  </a>
+  
+    <nav class="md-nav" aria-label="Other frameworks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cdk" class="md-nav__link">
+    CDK
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#serverless-framework" class="md-nav__link">
+    Serverless Framework
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#continuous-integration" class="md-nav__link">
+    Continuous integration
+  </a>
+  
+    <nav class="md-nav" aria-label="Continuous integration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#aws-codebuild" class="md-nav__link">
+    AWS CodeBuild
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#github-actions" class="md-nav__link">
+    GitHub Actions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gitlab" class="md-nav__link">
+    GitLab
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#existing-stacks" class="md-nav__link">
+    Existing stacks
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ide-integration" class="md-nav__link">
+    IDE integration
+  </a>
+  
+    <nav class="md-nav" aria-label="IDE integration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#visual-studio-code" class="md-nav__link">
+    Visual Studio Code
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tflint/" class="md-nav__link">
+        With tflint
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      <label class="md-nav__link" for="__nav_4">
+        Contributing
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Contributing" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Contributing
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/create_rule/" class="md-nav__link">
+        Creating rules
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    Installation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    Usage
+  </a>
+  
+    <nav class="md-nav" aria-label="Usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sample-outputs" class="md-nav__link">
+    Sample outputs
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ignoring-rules" class="md-nav__link">
+    Ignoring rules
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#other-frameworks" class="md-nav__link">
+    Other frameworks
+  </a>
+  
+    <nav class="md-nav" aria-label="Other frameworks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cdk" class="md-nav__link">
+    CDK
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#serverless-framework" class="md-nav__link">
+    Serverless Framework
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#continuous-integration" class="md-nav__link">
+    Continuous integration
+  </a>
+  
+    <nav class="md-nav" aria-label="Continuous integration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#aws-codebuild" class="md-nav__link">
+    AWS CodeBuild
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#github-actions" class="md-nav__link">
+    GitHub Actions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gitlab" class="md-nav__link">
+    GitLab
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#existing-stacks" class="md-nav__link">
+    Existing stacks
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ide-integration" class="md-nav__link">
+    IDE integration
+  </a>
+  
+    <nav class="md-nav" aria-label="IDE integration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#visual-studio-code" class="md-nav__link">
+    Visual Studio Code
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/awslabs/serverless-rules/edit/develop/docs/cfn-lint.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                <h1 id="cfn-lint-module"><code>cfn-lint</code> module<a class="headerlink" href="#cfn-lint-module" title="Permanent link">&para;</a></h1>
+<h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
+<p>Serverless Rules for <code>cfn-lint</code> is available through the <code>cfn-lint-serverless</code> Python module in PyPi. You can use pip to install the module:</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code>pip install cfn-lint cfn-lint-serverless
+</code></pre></div>
+</td></tr></table>
+<h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
+<p>You can now instruct <code>cfn-lint</code> to use Serverless Rules installed previous via <code>--append-rules</code>, or <code>-a</code> for short:</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code>cfn-lint my_template.yaml -a cfn_lint_serverless.rules
+</code></pre></div>
+</td></tr></table>
+<p>You can also try with a <a href="https://github.com/awslabs/serverless-rules/tree/main/examples/sam">Serverless Application Model (SAM)</a> example provided in this repository. In the root folder of the repository, you can run:</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code>cfn-lint examples/sam/template.yaml -a cfn_lint_serverless.rules
+</code></pre></div>
+</td></tr></table>
+<h3 id="sample-outputs">Sample outputs<a class="headerlink" href="#sample-outputs" title="Permanent link">&para;</a></h3>
+<p>If the template fulfills the requirements for all rules, <code>cfn-lint</code> will return an empty output. Otherwise, <code>cfn-lint</code> will output recommendations.</p>
+<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Matching template</label><div class="tabbed-content">
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code>$ cfn-lint template.yaml -a cfn_lint_serverless.rules
+$
+</code></pre></div>
+</td></tr></table>
+</div>
+<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">With recommendations</label><div class="tabbed-content">
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code>$ cfn-lint template.yaml -a cfn_lint_serverless.rules
+ES4000 EventBridge rule ConsumerFunctionTrigger should have a DeadLetterConfig.Arn property <span class="k">for</span> all its Targets.
+template.yaml:5:1
+
+WS1000 Lambda <span class="k">function</span> ConsumerFunction should have TracingConfig.Mode <span class="nb">set</span> to <span class="s1">&#39;Active&#39;</span>.
+template.yaml:7:3
+
+WS1004 Lambda <span class="k">function</span> ConsumerFunction does not have a corresponding log group with a Retention property
+template.yaml:7:3
+$
+</code></pre></div>
+</td></tr></table>
+</div>
+</div>
+<h3 id="ignoring-rules">Ignoring rules<a class="headerlink" href="#ignoring-rules" title="Permanent link">&para;</a></h3>
+<p>Serverless Rules is a set of recommended practices. </p>
+<p>We recommend you to keep Error-level rules enabled. Non-error rules, for example <a href="../rules/lambda/tracing/">Lambda Tracing</a>, contain detailed scenarios on when it’s safe to ignore them.</p>
+<p>When needed, you can ignore any specific rule that doesn’t match your environment.</p>
+<p>Rules in <code>cfn-lint</code> can be disabled either through the <code>--ignore-checks</code>/<code>-i</code> command line argument, or with the <code>.cfnlintrc</code> configuration file in the current working directory. See the <a href="https://github.com/aws-cloudformation/cfn-lint#configuration"><code>cfn-lint</code> documentation</a> for more information.</p>
+<div class="tabbed-set" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><label for="__tabbed_2_1">Command line</label><div class="tabbed-content">
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="c1"># Disable rule WS1000</span>
+cfn-lint my_template.yaml -a cfn_lint_serverless.rules -i WS1000
+</code></pre></div>
+</td></tr></table>
+</div>
+<input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><label for="__tabbed_2_2">.cfnlintrc</label><div class="tabbed-content">
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="nt">ignore_checks</span><span class="p">:</span>
+  <span class="c1"># Disable rule WS1000</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">WS1000</span>
+</code></pre></div>
+</td></tr></table>
+</div>
+</div>
+<h2 id="other-frameworks">Other frameworks<a class="headerlink" href="#other-frameworks" title="Permanent link">&para;</a></h2>
+<p>You can use the <code>cfn-lint</code> module with all frameworks that synthesize to a CloudFormation template, such as the <a href="https://docs.aws.amazon.com/cdk/latest/guide/home.html">AWS Cloud Development Kit (CDK)</a> and the <a href="https://www.serverless.com/">Serverless Framework</a>.</p>
+<h3 id="cdk">CDK<a class="headerlink" href="#cdk" title="Permanent link">&para;</a></h3>
+<p>With the <strong>AWS CDK</strong>, you define your cloud resources using a familiar programming language such as TypeScript, Python, Java, C#/.Net, or Go. It will then use CloudFormation to provision those resources in your AWS environments.</p>
+<p>Under the hood, CDK will generate a CloudFormation template before initiating a deployment on AWS. You can use the <code>cdk synth</code> command to generate that template manually. You can then run <code>cfn-lint</code> for inspecting that template.</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code>cdk synth &gt; template.yaml
+cfn-lint template.yaml -a cfn_lint_serverless.rules
+</code></pre></div>
+</td></tr></table>
+<p>You can also try with a <a href="https://github.com/awslabs/serverless-rules/tree/main/examples/cdk">CDK example</a> provided in this repository. In the root folder of the repository, you can run:</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="nb">cd</span> examples/cdk/
+cdk synth &gt; template.yaml
+cfn-lint template.yaml -a cfn_lint_serverless.rules
+</code></pre></div>
+</td></tr></table>
+<h3 id="serverless-framework">Serverless Framework<a class="headerlink" href="#serverless-framework" title="Permanent link">&para;</a></h3>
+<p>The <strong>Serverless Framework</strong> is a specialized framework for Serverless applications that uses CloudFormation under the hood when deploying resources to AWS. You can manually create a package using the <code>sls package</code> command, which will generate the CloudFormation templates. With the <code>--package</code> option, you can specify in which folder it will store your package. In that folder, you can find the CloudFormation templates as JSON files starting with <code>cloudformation-template-</code>. You can then run <code>cfn-lint</code> for inspecting those templates.</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code>sls package --package output/
+cfn-lint output/cloudformation-template-*.json -a cfn_lint_serverless.rules
+</code></pre></div>
+</td></tr></table>
+<h2 id="continuous-integration">Continuous integration<a class="headerlink" href="#continuous-integration" title="Permanent link">&para;</a></h2>
+<p>You can use Serverless Rules and <code>cfn-lint</code> with your continuous integration tool to automatically check CloudFormation templates with rules from this project. For example, you can validate on pull requests, merge to your main branch, or before deploying to production.</p>
+<p>If there are any issues with your template, <code>cfn-lint</code> will return a non-zero error code. You can find more information about <code>cfn-lint</code> return codes in <a href="https://github.com/aws-cloudformation/cfn-lint">its documentation</a>.</p>
+<h3 id="aws-codebuild">AWS CodeBuild<a class="headerlink" href="#aws-codebuild" title="Permanent link">&para;</a></h3>
+<p>Assuming that you are storing your template as <code>template.yaml</code> at the root of your repository, you can create a <a href="https://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html">buildspec file</a> such as this one:</p>
+<div class="tabbed-set" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><label for="__tabbed_3_1">Sample buildspec</label><div class="tabbed-content">
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="nt">version</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0.2</span>
+
+<span class="nt">phases</span><span class="p">:</span>
+  <span class="nt">install</span><span class="p">:</span>
+    <span class="nt">runtime-versions</span><span class="p">:</span>
+      <span class="nt">python</span><span class="p">:</span> <span class="s">&quot;3.8&quot;</span>
+    <span class="nt">commands</span><span class="p">:</span>
+      <span class="c1"># Install cfn-lint-serverless</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">pip install cfn-lint cfn-lint-serverless</span>
+  <span class="nt">pre_build</span><span class="p">:</span>
+    <span class="nt">commands</span><span class="p">:</span>
+      <span class="c1"># TODO: replace here with your template name if you are not</span>
+      <span class="c1"># using &#39;template.yaml&#39;.</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">cfn-lint template.yaml -a cfn_lint_serverless.rules</span>
+</code></pre></div>
+</td></tr></table>
+</div>
+<input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><label for="__tabbed_3_2">With JUnit report</label><div class="tabbed-content">
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="nt">version</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0.2</span>
+
+<span class="nt">phases</span><span class="p">:</span>
+  <span class="nt">install</span><span class="p">:</span>
+    <span class="nt">runtime-versions</span><span class="p">:</span>
+      <span class="nt">python</span><span class="p">:</span> <span class="s">&quot;3.8&quot;</span>
+    <span class="nt">commands</span><span class="p">:</span>
+      <span class="c1"># Install cfn-lint-serverless</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">pip install cfn-lint cfn-lint-serverless</span>
+  <span class="nt">pre_build</span><span class="p">:</span>
+    <span class="nt">commands</span><span class="p">:</span>
+      <span class="c1"># TODO: replace here with your template name if you are not</span>
+      <span class="c1"># using &#39;template.yaml&#39;.</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">cfn-lint template.yaml -a cfn_lint_serverless.rules -f junit --output-file cfn_lint_report.xml</span>
+
+<span class="nt">reports</span><span class="p">:</span>
+  <span class="nt">cfn-lint</span><span class="p">:</span>
+    <span class="nt">files</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">cfn_lint_report.xml</span>
+</code></pre></div>
+</td></tr></table>
+</div>
+</div>
+<p>If you want to run <code>cfn-lint</code> with other frameworks, see how you can generate CloudFormation templates in the <a href="#other-frameworks">Other frameworks</a> section of this documentation.</p>
+<h3 id="github-actions">GitHub Actions<a class="headerlink" href="#github-actions" title="Permanent link">&para;</a></h3>
+<p>Assuming that your template is stored as <code>template.yaml</code> at the root of your repository and that you are using <code>main</code> as your target branch for pull requests, you can create a GitHub actions workflow file such as this one:</p>
+<div class="tabbed-set" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><label for="__tabbed_4_1">Sample workflow</label><div class="tabbed-content">
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cfn-lint-serverless</span>
+
+<span class="nt">on</span><span class="p">:</span>
+  <span class="nt">pull_request</span><span class="p">:</span>
+    <span class="nt">branches</span><span class="p">:</span>
+      <span class="c1"># TODO: replace this if you are not using &#39;main&#39; as your target</span>
+      <span class="c1"># branch for pull requests.</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">main</span>
+
+<span class="nt">jobs</span><span class="p">:</span>
+  <span class="nt">cfn-lint-serverless</span><span class="p">:</span>
+    <span class="nt">runs-on</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+    <span class="nt">steps</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="nt">uses</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">actions/checkout@v2</span>
+      <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Set up Python 3.8</span>
+        <span class="nt">uses</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">actions/setup-python@v2</span>
+        <span class="nt">with</span><span class="p">:</span>
+          <span class="nt">python-version</span><span class="p">:</span> <span class="s">&quot;3.8&quot;</span>
+      <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Install cfn-lint-serverless</span>
+        <span class="c1"># Install cfn-lint-serverless</span>
+        <span class="nt">run</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">pip install cfn-lint cfn-lint-serverless</span>
+      <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Lint CloudFormation template</span>
+        <span class="c1"># TODO: replace here with your template name if you are not</span>
+        <span class="c1"># using &#39;template.yaml&#39;.</span>
+        <span class="nt">run</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cfn-lint template.yaml -a cfn_lint_serverless.rules</span>
+</code></pre></div>
+</td></tr></table>
+</div>
+<input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><label for="__tabbed_4_2">With JUnit report</label><div class="tabbed-content">
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cfn-lint-serverless</span>
+
+<span class="nt">on</span><span class="p">:</span>
+  <span class="nt">pull_request</span><span class="p">:</span>
+    <span class="nt">branches</span><span class="p">:</span>
+      <span class="c1"># TODO: replace this if you are not using &#39;main&#39; as your target</span>
+      <span class="c1"># branch for pull requests.</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">main</span>
+
+<span class="nt">jobs</span><span class="p">:</span>
+  <span class="nt">cfn-lint-serverless</span><span class="p">:</span>
+    <span class="nt">runs-on</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+    <span class="nt">steps</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="nt">uses</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">actions/checkout@v2</span>
+      <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Set up Python 3.8</span>
+        <span class="nt">uses</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">actions/setup-python@v2</span>
+        <span class="nt">with</span><span class="p">:</span>
+          <span class="nt">python-version</span><span class="p">:</span> <span class="s">&quot;3.8&quot;</span>
+      <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Install cfn-lint-serverless</span>
+        <span class="c1"># Install cfn-lint-serverless</span>
+        <span class="nt">run</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">pip install cfn-lint cfn-lint-serverless</span>
+      <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Lint CloudFormation template</span>
+        <span class="c1"># TODO: replace here with your template name if you are not</span>
+        <span class="c1"># using &#39;template.yaml&#39;.</span>
+        <span class="nt">run</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cfn-lint template.yaml -a cfn_lint_serverless.rules -f junit --output-file cfn_lint_report.xml</span>
+        <span class="c1"># Annotate PR based on cfn-lint&#39;s findings</span>
+      <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Publish test report</span>
+        <span class="nt">uses</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mikepenz/action-junit-report@v2</span>
+        <span class="c1"># Only run this step on failure</span>
+        <span class="nt">if</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${{ failure() }}</span>
+        <span class="nt">with</span><span class="p">:</span>
+          <span class="nt">report_paths</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cfn_lint_report.xml</span>
+</code></pre></div>
+</td></tr></table>
+</div>
+</div>
+<p>If you want to run <code>cfn-lint</code> with other frameworks, see how you can generate CloudFormation templates in the <a href="#other-frameworks">Other frameworks</a> section of this documentation.</p>
+<h3 id="gitlab">GitLab<a class="headerlink" href="#gitlab" title="Permanent link">&para;</a></h3>
+<p>Assuming that your template is stored as <code>template.yaml</code> at the root of your repository, you can create a <code>.gitlab-ci.yml</code> file such as this one:</p>
+<div class="tabbed-set" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><label for="__tabbed_5_1">Sample file</label><div class="tabbed-content">
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="nt">cfn-lint-serverless</span><span class="p">:</span>
+  <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">python:latest</span>
+  <span class="nt">only</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">merge_requests</span>
+  <span class="nt">script</span><span class="p">:</span>
+    <span class="c1"># Install cfn-lint-serverless</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">pip install cfn-lint cfn-lint-serverless</span>
+    <span class="c1"># TODO: replace here with your template name if you are not</span>
+    <span class="c1"># using &#39;template.yaml&#39;.</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">cfn-lint template.yaml -a cfn_lint_serverless.rules</span>
+</code></pre></div>
+</td></tr></table>
+</div>
+<input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><label for="__tabbed_5_2">With JUnit report</label><div class="tabbed-content">
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="nt">cfn-lint-serverless</span><span class="p">:</span>
+  <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">python:latest</span>
+  <span class="nt">only</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">merge_requests</span>
+  <span class="nt">script</span><span class="p">:</span>
+    <span class="c1"># Install cfn-lint-serverless</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">pip install cfn-lint cfn-lint-serverless</span>
+    <span class="c1"># TODO: replace here with your template name if you are not</span>
+    <span class="c1"># using &#39;template.yaml&#39;.</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">cfn-lint template.yaml -a cfn_lint_serverless.rules -f junit --output-file cfn_lint_report.xml</span>
+  <span class="nt">artifacts</span><span class="p">:</span>
+    <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">always</span>
+    <span class="nt">reports</span><span class="p">:</span>
+      <span class="nt">junit</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cfn_lint_report.xml</span>
+</code></pre></div>
+</td></tr></table>
+</div>
+</div>
+<p>If you want to run <code>cfn-lint</code> with other frameworks, see how you can generate CloudFormation templates in the <a href="#other-frameworks">Other frameworks</a> section of this documentation.</p>
+<h2 id="existing-stacks">Existing stacks<a class="headerlink" href="#existing-stacks" title="Permanent link">&para;</a></h2>
+<p>If you want to check if a stack already deployed to AWS matches the recommended practices from Serverless Rules, you can download the CloudFormation template and run <code>cfn-lint</code> locally.</p>
+<div class="tabbed-set" data-tabs="6:1"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><label for="__tabbed_6_1">Existing stack</label><div class="tabbed-content">
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span>
+<span class="normal">9</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="nv">STACK_NAME</span><span class="o">=</span><span class="s2">&quot;your-cloudformation-stack-name&quot;</span>
+
+<span class="c1"># Retrieve the template from AWS CloudFormation</span>
+aws cloudformation get-template <span class="se">\</span>
+    --stack-name <span class="nv">$STACK_NAME</span> <span class="se">\</span>
+    --query <span class="s1">&#39;TemplateBody&#39;</span> &gt; template.json
+
+<span class="c1"># Run cfn-lint</span>
+cfn-lint template.json -a cfn_lint_serverless.rules
+</code></pre></div>
+</td></tr></table>
+</div>
+</div>
+<h2 id="ide-integration">IDE integration<a class="headerlink" href="#ide-integration" title="Permanent link">&para;</a></h2>
+<h3 id="visual-studio-code">Visual Studio Code<a class="headerlink" href="#visual-studio-code" title="Permanent link">&para;</a></h3>
+<p><img alt="Screenshot of VS Code using CloudFormation Linter and Serverless Rules" src="../images/cfn_lint_vscode.png" /></p>
+<p>For Visual Studio Code, you can add the <a href="https://marketplace.visualstudio.com/items?itemName=kddejong.vscode-cfn-lint">CloudFormation Linter</a> extension, which will automatically run <code>cfn-lint</code> on your CloudFormation templates. In the extension's <code>settings.json</code> file, you can add additional rules like so:</p>
+<div class="tabbed-set" data-tabs="7:1"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><label for="__tabbed_7_1">Extension settings</label><div class="tabbed-content">
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="p">{</span>
+  <span class="err">//</span> <span class="err">...</span> <span class="err">o</span><span class="kc">t</span><span class="err">her</span> <span class="err">se</span><span class="kc">tt</span><span class="err">i</span><span class="kc">n</span><span class="err">gs</span> <span class="err">omi</span><span class="kc">tte</span><span class="err">d</span>
+
+  <span class="nt">&quot;cfnLint.appendRules&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;cfn_lint_serverless.rules&quot;</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+</td></tr></table>
+</div>
+</div>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../rules/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Rules" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Rules
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../tflint/" class="md-footer__link md-footer__link--next" aria-label="Next: With tflint" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              With tflint
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2021 Amazon Web Services
+          </div>
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+        
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.sections"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.b0710199.min.js", "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.76f349be.min.js"></script>
+      
+    
+  </body>
+</html>
